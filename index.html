@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+<meta charset="UTF-8">
+<title>Traductor PRO</title>
+
+<style>
+
+body{
+font-family:Arial;
+background:#0f172a;
+color:white;
+display:flex;
+justify-content:center;
+align-items:center;
+height:100vh;
+margin:0;
+}
+
+.container{
+background:#1e293b;
+padding:30px;
+border-radius:12px;
+width:380px;
+box-shadow:0 0 20px rgba(0,0,0,0.5);
+}
+
+h2{
+text-align:center;
+margin-bottom:20px;
+}
+
+textarea{
+width:100%;
+height:100px;
+border:none;
+border-radius:8px;
+padding:10px;
+margin-bottom:10px;
+font-size:14px;
+}
+
+.selects{
+display:flex;
+gap:10px;
+margin-bottom:10px;
+}
+
+select{
+flex:1;
+padding:8px;
+border-radius:6px;
+border:none;
+}
+
+button{
+width:100%;
+padding:10px;
+background:#38bdf8;
+border:none;
+border-radius:6px;
+font-weight:bold;
+cursor:pointer;
+}
+
+button:hover{
+background:#0ea5e9;
+}
+
+.resultado{
+margin-top:15px;
+background:#334155;
+padding:10px;
+border-radius:6px;
+min-height:40px;
+}
+
+.tools{
+display:flex;
+gap:10px;
+margin-top:10px;
+}
+
+.tools button{
+flex:1;
+background:#475569;
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<h2>🌎 Traductor</h2>
+
+<textarea id="texto" placeholder="Escribe algo..."></textarea>
+
+<div class="selects">
+
+<select id="from">
+<option value="auto">Detectar</option>
+<option value="es">Español</option>
+<option value="en">Inglés</option>
+<option value="fr">Francés</option>
+<option value="it">Italiano</option>
+<option value="pt">Portugués</option>
+<option value="de">Alemán</option>
+</select>
+
+<select id="to">
+<option value="en">Inglés</option>
+<option value="es">Español</option>
+<option value="fr">Francés</option>
+<option value="it">Italiano</option>
+<option value="pt">Portugués</option>
+<option value="de">Alemán</option>
+</select>
+
+</div>
+
+<button onclick="traducir()">Traducir</button>
+
+<div class="resultado" id="resultado"></div>
+
+<div class="tools">
+
+<button onclick="copiar()">Copiar</button>
+<button onclick="hablar()">🔊 Escuchar</button>
+
+</div>
+
+</div>
+
+<script>
+
+async function traducir(){
+
+let texto = document.getElementById("texto").value
+let from = document.getElementById("from").value
+let to = document.getElementById("to").value
+
+let url = `https://api.mymemory.translated.net/get?q=${texto}&langpair=${from}|${to}`
+
+let res = await fetch(url)
+let data = await res.json()
+
+document.getElementById("resultado").innerText =
+data.responseData.translatedText
+
+}
+
+function copiar(){
+
+let texto = document.getElementById("resultado").innerText
+
+navigator.clipboard.writeText(texto)
+
+alert("Texto copiado")
+
+}
+
+function hablar(){
+
+let texto = document.getElementById("resultado").innerText
+
+let speech = new SpeechSynthesisUtterance(texto)
+
+speech.lang = "en"
+
+speechSynthesis.speak(speech)
+
+}
+
+</script>
+
+</body>
+
+</html>
